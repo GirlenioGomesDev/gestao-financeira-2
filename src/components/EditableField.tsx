@@ -1,18 +1,18 @@
-import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
-import { useEffect, useState } from "react";
-import { Pressable, TextInput, View } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import { useEffect, useState } from 'react';
+import { Pressable, TextInput, View } from 'react-native';
 
-import { AppText } from "@/components/Text";
-import { formatCurrency } from "@/utils/format";
+import { AppText } from '@/components/Text';
+import { formatCurrency } from '@/utils/format';
 
 type EditableFieldProps = {
   value: string | number;
-  type: "text" | "currency" | "number" | "date" | "select" | "multiline";
+  type: 'text' | 'currency' | 'number' | 'date' | 'select' | 'multiline';
   label?: string;
   options?: string[];
   onSave: (newValue: string | number) => void;
-  displayStyle?: "inline" | "card" | "title" | "subtitle";
+  displayStyle?: 'inline' | 'card' | 'title' | 'subtitle';
   prefix?: string;
   suffix?: string;
   placeholder?: string;
@@ -25,43 +25,44 @@ export function EditableField({
   label,
   options = [],
   onSave,
-  displayStyle = "inline",
+  displayStyle = 'inline',
   prefix,
   suffix,
   placeholder,
-  validation
+  validation,
 }: EditableFieldProps) {
   const [editing, setEditing] = useState(false);
   const [showPencil, setShowPencil] = useState(false);
-  const [draft, setDraft] = useState(String(value ?? ""));
+  const [draft, setDraft] = useState(String(value ?? ''));
   const [error, setError] = useState<string | null>(null);
   const [savedFlash, setSavedFlash] = useState(false);
 
   useEffect(() => {
-    setDraft(String(value ?? ""));
+    setDraft(String(value ?? ''));
   }, [value]);
 
   const editStyle = {
-    borderColor: savedFlash ? "#2F8F6B" : editing ? "#7DB7D9" : "transparent",
-    backgroundColor: savedFlash ? "#E8F6EF" : "transparent"
+    borderColor: savedFlash ? '#2F8F6B' : editing ? '#7DB7D9' : 'transparent',
+    backgroundColor: savedFlash ? '#E8F6EF' : 'transparent',
   };
 
   const textClass =
-    displayStyle === "title"
-      ? "font-body text-2xl"
-      : displayStyle === "subtitle"
-        ? "text-sm text-muted"
-        : displayStyle === "card"
-          ? "font-body text-base"
-          : "text-base";
+    displayStyle === 'title'
+      ? 'font-body text-2xl'
+      : displayStyle === 'subtitle'
+        ? 'text-sm text-muted'
+        : displayStyle === 'card'
+          ? 'font-body text-base'
+          : 'text-base';
 
   const formatted =
-    type === "currency" && typeof value === "number"
+    type === 'currency' && typeof value === 'number'
       ? formatCurrency(value)
-      : `${prefix ?? ""}${String(value ?? "")}${suffix ?? ""}`;
+      : `${prefix ?? ''}${String(value ?? '')}${suffix ?? ''}`;
 
   function save() {
-    const nextValue = type === "currency" || type === "number" ? Number(draft.replace(",", ".")) || 0 : draft;
+    const nextValue =
+      type === 'currency' || type === 'number' ? Number(draft.replace(',', '.')) || 0 : draft;
     const message = validation?.(nextValue);
     if (message) {
       setError(message);
@@ -81,10 +82,14 @@ export function EditableField({
     return (
       <View className="my-1 rounded-paper border p-2" style={editStyle}>
         {label ? <AppText className="mb-1 text-xs text-muted">{label}</AppText> : null}
-        {type === "select" ? (
+        {type === 'select' ? (
           <View className="flex-row flex-wrap gap-2">
-            {options.map((option) => (
-              <Pressable key={option} onPress={() => setDraft(option)} className={`rounded-full border px-3 py-2 ${draft === option ? "border-primary bg-primary/10" : "border-line bg-surface"}`}>
+            {options.map(option => (
+              <Pressable
+                key={option}
+                onPress={() => setDraft(option)}
+                className={`rounded-full border px-3 py-2 ${draft === option ? 'border-primary bg-primary/10' : 'border-line bg-surface'}`}
+              >
                 <AppText className="text-sm">{option}</AppText>
               </Pressable>
             ))}
@@ -93,8 +98,8 @@ export function EditableField({
           <TextInput
             value={draft}
             onChangeText={setDraft}
-            multiline={type === "multiline"}
-            keyboardType={type === "currency" || type === "number" ? "decimal-pad" : "default"}
+            multiline={type === 'multiline'}
+            keyboardType={type === 'currency' || type === 'number' ? 'decimal-pad' : 'default'}
             placeholder={placeholder}
             placeholderTextColor="#9A9085"
             className="rounded-paper bg-surface px-3 py-2 font-body text-base text-ink"
@@ -107,7 +112,7 @@ export function EditableField({
           </Pressable>
           <Pressable
             onPress={() => {
-              setDraft(String(value ?? ""));
+              setDraft(String(value ?? ''));
               setEditing(false);
               setError(null);
             }}
@@ -121,7 +126,10 @@ export function EditableField({
   }
 
   return (
-    <View className={`${displayStyle === "card" ? "rounded-paper border border-line bg-surface p-3" : "rounded-paper border p-1"}`} style={editStyle}>
+    <View
+      className={`${displayStyle === 'card' ? 'rounded-paper border border-line bg-surface p-3' : 'rounded-paper border p-1'}`}
+      style={editStyle}
+    >
       {label ? <AppText className="mb-1 text-xs text-muted">{label}</AppText> : null}
       <Pressable
         onLongPress={() => {
@@ -133,8 +141,11 @@ export function EditableField({
         className="flex-row items-center"
       >
         <AppText className={`${textClass} flex-1`}>{formatted}</AppText>
-        {(showPencil || displayStyle === "card") ? (
-          <Pressable onPress={() => setEditing(true)} className="ml-2 h-8 w-8 items-center justify-center rounded-full bg-paper">
+        {showPencil || displayStyle === 'card' ? (
+          <Pressable
+            onPress={() => setEditing(true)}
+            className="ml-2 h-8 w-8 items-center justify-center rounded-full bg-paper"
+          >
             <Ionicons name="pencil" size={15} color="#2F8F6B" />
           </Pressable>
         ) : null}

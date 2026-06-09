@@ -7,21 +7,43 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#FDFAF3"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "icon": "./assets/icon.png",
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.leno2801.meudiariofinanceiro"
     },
     "android": {
-      "package": "com.leno2801.meudiariofinanceiro"
+      "package": "com.leno2801.meudiariofinanceiro",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FDFAF3"
+      },
+      "permissions": ["android.permission.VIBRATE", "android.permission.RECEIVE_BOOT_COMPLETED"]
     },
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-notifications"
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#B85C38",
+          "sounds": []
+        }
+      ],
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

@@ -1,17 +1,21 @@
-import { format, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-export const currency = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL"
+export const currency = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
 });
 
 export function formatCurrency(value: number) {
   return currency.format(value);
 }
 
+export function formatAmount(amount: number, type: 'income' | 'expense') {
+  return `${type === 'income' ? '+' : '-'} ${formatCurrency(amount)}`;
+}
+
 export function formatShortDate(value: string) {
-  return format(parseISO(value), "dd MMM", { locale: ptBR });
+  return format(parseISO(value), 'dd MMM', { locale: ptBR });
 }
 
 export function formatLongDate(value: string) {

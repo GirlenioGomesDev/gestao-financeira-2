@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+.npm-cache/
+.gradle-local/
+.jdk17/
+android/.gradle/
+android/.cxx/
+android/app/.cxx/
+android/app/build/
+android/build/

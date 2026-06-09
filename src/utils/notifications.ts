@@ -1,4 +1,4 @@
-import * as Notifications from "expo-notifications";
+import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -6,8 +6,8 @@ Notifications.setNotificationHandler({
     shouldShowBanner: true,
     shouldShowList: true,
     shouldPlaySound: false,
-    shouldSetBadge: false
-  })
+    shouldSetBadge: false,
+  }),
 });
 
 export async function scheduleDailyReminder() {
@@ -19,14 +19,14 @@ export async function scheduleDailyReminder() {
   await Notifications.cancelAllScheduledNotificationsAsync();
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "Hora do diario financeiro",
-      body: "Dois minutinhos para anotar o dia e cuidar dos seus planos."
+      title: 'Hora do diario financeiro',
+      body: 'Dois minutinhos para anotar o dia e cuidar dos seus planos.',
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour: 20,
-      minute: 0
-    }
+      minute: 0,
+    },
   });
 
   return true;

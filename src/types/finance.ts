@@ -1,19 +1,19 @@
-export type TransactionType = "income" | "expense";
+export type TransactionType = 'income' | 'expense';
 
 export type TransactionCategory =
-  | "moradia"
-  | "mercado"
-  | "transporte"
-  | "contas"
-  | "saude"
-  | "lazer"
-  | "educacao"
-  | "alimentacao"
-  | "compras"
-  | "assinaturas"
-  | "investimentos"
-  | "renda"
-  | "outros";
+  | 'moradia'
+  | 'mercado'
+  | 'transporte'
+  | 'contas'
+  | 'saude'
+  | 'lazer'
+  | 'educacao'
+  | 'alimentacao'
+  | 'compras'
+  | 'assinaturas'
+  | 'investimentos'
+  | 'renda'
+  | 'outros';
 
 export type Transaction = {
   id: string;
@@ -41,7 +41,7 @@ export type Goal = {
   color: string;
   emoji?: string;
   monthlyAmount?: number;
-  kind?: "goal" | "dream";
+  kind?: 'goal' | 'dream';
 };
 
 export type Habit = {
@@ -55,7 +55,7 @@ export type Habit = {
 export type DiaryEntry = {
   id: string;
   date: string;
-  mood: "tranquilo" | "apertado" | "animado" | "alerta";
+  mood: 'tranquilo' | 'apertado' | 'animado' | 'alerta';
   text: string;
 };
 
@@ -72,7 +72,7 @@ export type Category = {
   type: TransactionType;
 };
 
-export type InvoiceSource = "ocr" | "pdf" | "csv" | "manual";
+export type InvoiceSource = 'ocr' | 'pdf' | 'csv' | 'manual';
 
 export type InvoiceImport = {
   id: string;
@@ -114,7 +114,7 @@ export type ParsedInvoice = {
   rawText?: string;
 };
 
-export type AccountKind = "checking" | "savings" | "cash" | "wallet";
+export type AccountKind = 'checking' | 'savings' | 'cash' | 'wallet';
 
 export type FinancialAccount = {
   id: string;
@@ -148,5 +148,5 @@ export type FinancialAlert = {
   id: string;
   title: string;
   message: string;
-  severity: "info" | "warning" | "danger";
+  severity: 'info' | 'warning' | 'danger';
 };

@@ -1,6 +1,6 @@
-import { TextInput, TextInputProps } from "react-native";
+import { TextInput, TextInputProps } from 'react-native';
 
-type Props = Omit<TextInputProps, "value" | "onChangeText"> & {
+type Props = Omit<TextInputProps, 'value' | 'onChangeText'> & {
   value: number;
   onChangeValue: (value: number) => void;
 };
@@ -8,9 +8,9 @@ type Props = Omit<TextInputProps, "value" | "onChangeText"> & {
 export function CurrencyInput({ value, onChangeValue, ...props }: Props) {
   return (
     <TextInput
-      value={value ? String(value).replace(".", ",") : ""}
-      onChangeText={(text) => {
-        const normalized = text.replace(/[^\d,.]/g, "").replace(",", ".");
+      value={value ? String(value).replace('.', ',') : ''}
+      onChangeText={text => {
+        const normalized = text.replace(/[^\d,.]/g, '').replace(',', '.');
         onChangeValue(Number(normalized) || 0);
       }}
       keyboardType="decimal-pad"

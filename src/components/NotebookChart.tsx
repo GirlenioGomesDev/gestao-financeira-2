@@ -1,6 +1,6 @@
-import { View } from "react-native";
+import { View } from 'react-native';
 
-import { AppText } from "@/components/Text";
+import { AppText } from '@/components/Text';
 
 type Props = {
   values: number[];
@@ -17,7 +17,11 @@ export function NotebookChart({ values }: Props) {
       </View>
       <View className="h-28 flex-row items-end gap-2">
         {values.map((value, index) => (
-          <View key={`${value}-${index}`} className="flex-1 rounded-t-paper bg-primary" style={{ height: `${Math.max(12, (value / max) * 100)}%` }} />
+          <View
+            key={`${value}-${index}`}
+            className="flex-1 rounded-t-paper bg-primary"
+            style={{ height: `${Math.max(12, (value / max) * 100)}%` }}
+          />
         ))}
       </View>
     </View>

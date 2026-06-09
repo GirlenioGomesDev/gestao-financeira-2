@@ -1,41 +1,41 @@
-import { router } from "expo-router";
-import { useState } from "react";
-import { Pressable, TextInput, View } from "react-native";
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, TextInput, View } from 'react-native';
 
-import { EditableField } from "@/components/EditableField";
-import { PaperScreen } from "@/components/PaperScreen";
-import { PrimaryButton } from "@/components/PrimaryButton";
-import { SectionHeader } from "@/components/SectionHeader";
-import { AppText } from "@/components/Text";
-import { ParsedInvoiceTransaction } from "@/types/finance";
-import { categorizeLocal } from "@/utils/categorizer";
-import { formatCurrency, uid } from "@/utils/format";
+import { EditableField } from '@/components/EditableField';
+import { PaperScreen } from '@/components/PaperScreen';
+import { PrimaryButton } from '@/components/PrimaryButton';
+import { SectionHeader } from '@/components/SectionHeader';
+import { AppText } from '@/components/Text';
+import { ParsedInvoiceTransaction } from '@/types/finance';
+import { categorizeLocal } from '@/utils/categorizer';
+import { formatCurrency, uid } from '@/utils/format';
 
 export default function ManualInvoiceScreen() {
-  const [bank, setBank] = useState("Nubank");
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
+  const [bank, setBank] = useState('Nubank');
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState('');
   const [items, setItems] = useState<ParsedInvoiceTransaction[]>([]);
   const invoiceTotal = items.reduce((sum, item) => sum + item.amount, 0);
 
   function addItem() {
-    const numericAmount = Number(amount.replace(/\./g, "").replace(",", "."));
+    const numericAmount = Number(amount.replace(/\./g, '').replace(',', '.'));
     if (!description.trim() || !numericAmount) return;
 
-    setItems((current) => [
+    setItems(current => [
       ...current,
       {
-        id: uid("pi"),
+        id: uid('pi'),
         date: new Date().toISOString(),
         description,
         amount: numericAmount,
-        type: "expense",
+        type: 'expense',
         category: categorizeLocal(description),
-        bank
-      }
+        bank,
+      },
     ]);
-    setDescription("");
-    setAmount("");
+    setDescription('');
+    setAmount('');
   }
 
   function review() {
@@ -43,21 +43,37 @@ export default function ManualInvoiceScreen() {
       bank,
       referenceMonth: new Date().toISOString().slice(0, 7),
       totalAmount: invoiceTotal,
-      source: "manual",
-      transactions: items
+      source: 'manual',
+      transactions: items,
     };
-    router.push({ pathname: "/import-invoice/review", params: { invoice: encodeURIComponent(JSON.stringify(invoice)) } });
+    router.push({
+      pathname: '/import-invoice/review',
+      params: { invoice: encodeURIComponent(JSON.stringify(invoice)) },
+    });
   }
 
   return (
     <PaperScreen>
-      <SectionHeader title="Digitar Fatura" subtitle="A categoria aparece como sugestao e pode ser editada depois." />
-      <EditableField value={bank} type="text" label="Banco/cartao" displayStyle="card" onSave={(value) => setBank(String(value))} />
+      <SectionHeader
+        title="Digitar Fatura"
+        subtitle="A categoria aparece como sugestao e pode ser editada depois."
+      />
+      <EditableField
+        value={bank}
+        type="text"
+        label="Banco/cartao"
+        displayStyle="card"
+        onSave={value => setBank(String(value))}
+      />
 
       <View className="my-4 rounded-paper border border-primary bg-primary/10 p-4">
         <AppText className="text-xs uppercase text-primaryDark">Valor total desta fatura</AppText>
-        <AppText className="mt-1 font-body text-3xl text-primaryDark">{formatCurrency(invoiceTotal)}</AppText>
-        <AppText className="mt-2 text-sm text-muted">{items.length} gastos adicionados. Todos aparecem abaixo antes da revisao.</AppText>
+        <AppText className="mt-1 font-body text-3xl text-primaryDark">
+          {formatCurrency(invoiceTotal)}
+        </AppText>
+        <AppText className="mt-2 text-sm text-muted">
+          {items.length} gastos adicionados. Todos aparecem abaixo antes da revisao.
+        </AppText>
       </View>
 
       <View className="my-4 rounded-paper border border-line bg-surface p-4">
@@ -76,7 +92,9 @@ export default function ManualInvoiceScreen() {
           placeholderTextColor="#9A9085"
           className="mb-3 rounded-paper border border-line bg-paper px-4 py-3 font-body text-ink"
         />
-        <AppText className="mb-3 text-sm text-muted">Sugestao: {categorizeLocal(description)}</AppText>
+        <AppText className="mb-3 text-sm text-muted">
+          Sugestao: {categorizeLocal(description)}
+        </AppText>
         <PrimaryButton label="Adicionar gasto" icon="add" onPress={addItem} />
       </View>
 
@@ -96,7 +114,12 @@ export default function ManualInvoiceScreen() {
         </Pressable>
       ))}
 
-      <PrimaryButton label="Revisar importacao" icon="checkmark" onPress={review} disabled={items.length === 0} />
+      <PrimaryButton
+        label="Revisar importacao"
+        icon="checkmark"
+        onPress={review}
+        disabled={items.length === 0}
+      />
     </PaperScreen>
   );
 }

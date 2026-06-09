@@ -22,6 +22,8 @@
 - Importacao preserva origem, banco, parcelamento e possivel duplicata.
 - Backup local agora exporta e restaura dados completos.
 - Exportacao offline adicionada para CSV, Excel compativel e PDF simples.
+- OCR local real adicionado para fotos e imagens de faturas usando Google ML Kit em development
+  build.
 
 ## Funcionalidades adicionadas
 
@@ -47,7 +49,6 @@
 
 ## Sugestoes para versoes futuras
 
-- Adicionar OCR nativo em development build para ler faturas fotografadas de verdade.
 - Adicionar extrator nativo de PDF para PDFs comprimidos/escaneados.
 - Criar tela dedicada para cartoes com faturas por competencia.
 - Criar tela dedicada para contas e transferencias entre contas.

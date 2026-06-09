@@ -1,6 +1,6 @@
-import { View } from "react-native";
+import { View } from 'react-native';
 
-import { AppText, DisplayText } from "@/components/Text";
+import { AppText, DisplayText } from '@/components/Text';
 
 type Props = {
   title: string;

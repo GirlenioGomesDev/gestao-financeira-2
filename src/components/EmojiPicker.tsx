@@ -1,6 +1,6 @@
-import { Modal, Pressable, View } from "react-native";
+import { Modal, Pressable, View } from 'react-native';
 
-import { AppText, DisplayText } from "@/components/Text";
+import { AppText, DisplayText } from '@/components/Text';
 
 type Props = {
   visible: boolean;
@@ -8,7 +8,26 @@ type Props = {
   onSelect: (emoji: string) => void;
 };
 
-const emojis = ["💰", "🏆", "🏠", "🚗", "🍽️", "❤️", "🎉", "⭐", "📚", "🚌", "🛒", "💊", "🧾", "✈️", "🎯", "🔧", "👕", "📱"];
+const emojis = [
+  '💰',
+  '🏆',
+  '🏠',
+  '🚗',
+  '🍽️',
+  '❤️',
+  '🎉',
+  '⭐',
+  '📚',
+  '🚌',
+  '🛒',
+  '💊',
+  '🧾',
+  '✈️',
+  '🎯',
+  '🔧',
+  '👕',
+  '📱',
+];
 
 export function EmojiPicker({ visible, onClose, onSelect }: Props) {
   return (
@@ -17,12 +36,15 @@ export function EmojiPicker({ visible, onClose, onSelect }: Props) {
         <View className="rounded-t-3xl bg-paper p-5">
           <View className="mb-4 flex-row items-center justify-between">
             <DisplayText className="text-3xl">Escolha um icone</DisplayText>
-            <Pressable onPress={onClose} className="h-10 w-10 items-center justify-center rounded-full bg-line">
+            <Pressable
+              onPress={onClose}
+              className="h-10 w-10 items-center justify-center rounded-full bg-line"
+            >
               <AppText>X</AppText>
             </Pressable>
           </View>
           <View className="flex-row flex-wrap gap-2">
-            {emojis.map((emoji) => (
+            {emojis.map(emoji => (
               <Pressable
                 key={emoji}
                 onPress={() => {

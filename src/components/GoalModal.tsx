@@ -1,16 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { KeyboardAvoidingView, Modal, Platform, Pressable, TextInput, View } from "react-native";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, TextInput, View } from 'react-native';
+import { z } from 'zod';
 
-import { PrimaryButton } from "@/components/PrimaryButton";
-import { AppText, DisplayText } from "@/components/Text";
-import { useFinanceStore } from "@/store/useFinanceStore";
+import { PrimaryButton } from '@/components/PrimaryButton';
+import { AppText, DisplayText } from '@/components/Text';
+import { useFinanceStore } from '@/store/useFinanceStore';
 
 const schema = z.object({
-  title: z.string().min(3, "De um nome para esse sonho."),
-  targetAmount: z.coerce.number().positive("Digite uma meta maior que zero."),
-  savedAmount: z.coerce.number().min(0).default(0)
+  title: z.string().min(3, 'De um nome para esse sonho.'),
+  targetAmount: z.coerce.number().positive('Digite uma meta maior que zero.'),
+  savedAmount: z.coerce.number().min(0).default(0),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -20,18 +20,18 @@ type Props = {
   onClose: () => void;
 };
 
-const colors = ["#2F8F6B", "#F5B84B", "#7DB7D9", "#9A86C8", "#E96C5F"];
+const colors = ['#2F8F6B', '#F5B84B', '#7DB7D9', '#9A86C8', '#E96C5F'];
 
 export function GoalModal({ visible, onClose }: Props) {
-  const addGoal = useFinanceStore((state) => state.addGoal);
+  const addGoal = useFinanceStore(state => state.addGoal);
   const {
     control,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { title: "", targetAmount: 0, savedAmount: 0 }
+    defaultValues: { title: '', targetAmount: 0, savedAmount: 0 },
   });
 
   function submit(values: FormValues) {
@@ -42,11 +42,17 @@ export function GoalModal({ visible, onClose }: Props) {
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} className="flex-1 justify-end bg-ink/30">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        className="flex-1 justify-end bg-ink/30"
+      >
         <View className="rounded-t-3xl bg-paper px-6 pb-8 pt-5">
           <View className="mb-4 flex-row items-center justify-between">
             <DisplayText className="text-3xl">Novo sonho</DisplayText>
-            <Pressable onPress={onClose} className="h-10 w-10 items-center justify-center rounded-full bg-line">
+            <Pressable
+              onPress={onClose}
+              className="h-10 w-10 items-center justify-center rounded-full bg-line"
+            >
               <AppText className="font-body text-lg">X</AppText>
             </Pressable>
           </View>
@@ -72,8 +78,8 @@ export function GoalModal({ visible, onClose }: Props) {
             name="targetAmount"
             render={({ field: { value, onChange } }) => (
               <TextInput
-                value={value ? String(value) : ""}
-                onChangeText={(text) => onChange(text.replace(",", "."))}
+                value={value ? String(value) : ''}
+                onChangeText={text => onChange(text.replace(',', '.'))}
                 keyboardType="decimal-pad"
                 placeholder="Valor da meta"
                 placeholderTextColor="#9A9085"
@@ -87,8 +93,8 @@ export function GoalModal({ visible, onClose }: Props) {
             name="savedAmount"
             render={({ field: { value, onChange } }) => (
               <TextInput
-                value={value ? String(value) : ""}
-                onChangeText={(text) => onChange(text.replace(",", "."))}
+                value={value ? String(value) : ''}
+                onChangeText={text => onChange(text.replace(',', '.'))}
                 keyboardType="decimal-pad"
                 placeholder="Quanto ja guardou?"
                 placeholderTextColor="#9A9085"

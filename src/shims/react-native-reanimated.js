@@ -1,5 +1,5 @@
-const React = require("react");
-const { Animated } = require("react-native");
+const React = require('react');
+const { Animated } = require('react-native');
 
 function identity(value) {
   return value;
@@ -10,7 +10,7 @@ function makeMutable(value) {
 }
 
 function useAnimatedStyle(factory) {
-  return typeof factory === "function" ? factory() : {};
+  return typeof factory === 'function' ? factory() : {};
 }
 
 const Easing = {
@@ -32,7 +32,7 @@ module.exports = {
   makeMutable,
   useAnimatedStyle,
   useSharedValue: makeMutable,
-  useDerivedValue: (factory) => makeMutable(typeof factory === "function" ? factory() : undefined),
+  useDerivedValue: factory => makeMutable(typeof factory === 'function' ? factory() : undefined),
   useAnimatedReaction: () => {},
   useAnimatedRef: () => React.useRef(null),
   withTiming: identity,
@@ -40,6 +40,6 @@ module.exports = {
   withRepeat: identity,
   withSequence: (...values) => values[values.length - 1],
   cancelAnimation: () => {},
-  runOnJS: (fn) => fn,
+  runOnJS: fn => fn,
   interpolate: identity,
 };
