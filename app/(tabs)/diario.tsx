@@ -1,15 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
-import { Alert, Pressable, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, TextInput, View } from 'react-native';
 
 import { DiaryModal } from '@/components/DiaryModal';
 import { EditableField } from '@/components/EditableField';
 import { EmptyState } from '@/components/EmptyState';
-import { PaperScreen } from '@/components/PaperScreen';
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { SectionHeader } from '@/components/SectionHeader';
-import { AppText } from '@/components/Text';
+import { AppText, DisplayText } from '@/components/Text';
 import { useFinanceStore } from '@/store/useFinanceStore';
 import { formatLongDate } from '@/utils/format';
 
@@ -40,9 +38,32 @@ export default function DiaryScreen() {
   }
 
   return (
-    <PaperScreen>
-      <SectionHeader title="Diario" subtitle="Habitos pequenos tambem contam historia." />
-      <PrimaryButton label="Escrever nota" icon="create" onPress={() => setModalVisible(true)} />
+    <ScrollView
+      className="flex-1 bg-paper"
+      contentContainerClassName="px-5 pb-32 pt-14"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="mb-6">
+        <AppText className="text-xs uppercase text-muted">Diário</AppText>
+        <DisplayText className="text-4xl">Registros</DisplayText>
+        <AppText className="text-sm text-muted">hábitos pequenos também contam história</AppText>
+      </View>
+      <View className="mb-5 flex-row gap-2">
+        <Pressable
+          onPress={() => setModalVisible(true)}
+          className="flex-1 flex-row items-center justify-center gap-2 rounded-pill bg-primaryDark py-3"
+        >
+          <Ionicons name="create-outline" size={16} color="#FFFFFF" />
+          <AppText className="text-sm text-white">Nova nota</AppText>
+        </Pressable>
+        <Pressable
+          onPress={() => setAddingHabit(value => !value)}
+          className="flex-1 flex-row items-center justify-center gap-2 rounded-pill border border-line bg-surface py-3"
+        >
+          <Ionicons name={addingHabit ? 'close' : 'add'} size={16} color="#1E7055" />
+          <AppText className="text-sm text-primaryDark">Hábito</AppText>
+        </Pressable>
+      </View>
 
       <View className="my-5">
         <View className="mb-3 flex-row items-center justify-between">
@@ -55,13 +76,13 @@ export default function DiaryScreen() {
           </Pressable>
         </View>
         {addingHabit ? (
-          <View className="mb-3 rounded-paper border border-line bg-surface p-3">
+          <View className="mb-3 rounded-card border border-line bg-surface p-3">
             <TextInput
               value={habitTitle}
               onChangeText={setHabitTitle}
               placeholder="Ex: Conferir o saldo antes de comprar"
               placeholderTextColor="#9A9085"
-              className="rounded-paper border border-line bg-paper px-4 py-3 font-body text-base text-ink"
+              className="rounded-card border border-line bg-paper px-4 py-3 font-body text-base text-ink"
             />
             <PrimaryButton
               label="Adicionar hábito"
@@ -74,7 +95,7 @@ export default function DiaryScreen() {
         {habits.map(habit => (
           <View
             key={habit.id}
-            className={`mb-3 flex-row items-center rounded-paper border p-4 ${
+            className={`mb-3 flex-row items-center rounded-card border p-4 ${
               habit.doneToday ? 'border-primaryDark bg-primary/10' : 'border-line bg-surface'
             }`}
           >
@@ -120,7 +141,7 @@ export default function DiaryScreen() {
       <AppText className="mb-3 font-body text-lg">Notas recentes</AppText>
       {diary.length ? (
         diary.map(entry => (
-          <View key={entry.id} className="mb-3 rounded-paper border border-line bg-surface p-4">
+          <View key={entry.id} className="mb-3 rounded-card border border-line bg-surface p-4">
             <View className="mb-2 flex-row items-center justify-between">
               <AppText className="text-sm text-muted">{formatLongDate(entry.date)}</AppText>
               <View
@@ -149,6 +170,6 @@ export default function DiaryScreen() {
       )}
 
       <DiaryModal visible={modalVisible} onClose={() => setModalVisible(false)} />
-    </PaperScreen>
+    </ScrollView>
   );
 }

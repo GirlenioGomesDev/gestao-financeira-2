@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { useFinanceStore } from '@/store/useFinanceStore';
 
 export function useRecurringSync() {
-  const recurringEntries = useFinanceStore(state => state.recurringEntries);
-  const transactions = useFinanceStore(state => state.transactions);
-  const addTransaction = useFinanceStore(state => state.addTransaction);
   const hasHydrated = useFinanceStore(state => state._hasHydrated);
+  const ranRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!hasHydrated) return;
 
     const now = new Date();
+    const monthKey = `${now.getFullYear()}-${now.getMonth()}`;
+    if (ranRef.current === monthKey) return;
+    ranRef.current = monthKey;
+
+    const { recurringEntries, transactions, addTransaction } = useFinanceStore.getState();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth();
 
@@ -19,16 +22,14 @@ export function useRecurringSync() {
       if (!entry.active) continue;
 
       const entryDate = new Date(currentYear, currentMonth, Math.min(entry.day, 28), 12);
-      const alreadyExists = transactions.some(transaction => {
-        const transactionDate = new Date(transaction.date);
-        return (
+      const alreadyExists = transactions.some(
+        transaction =>
           transaction.title === entry.title &&
           transaction.amount === entry.amount &&
           transaction.type === entry.type &&
-          transactionDate.getFullYear() === currentYear &&
-          transactionDate.getMonth() === currentMonth
-        );
-      });
+          new Date(transaction.date).getFullYear() === currentYear &&
+          new Date(transaction.date).getMonth() === currentMonth,
+      );
 
       if (!alreadyExists) {
         addTransaction({
@@ -41,5 +42,5 @@ export function useRecurringSync() {
         });
       }
     }
-  }, [addTransaction, hasHydrated, recurringEntries, transactions]);
+  }, [hasHydrated]);
 }

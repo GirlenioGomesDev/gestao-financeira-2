@@ -23,6 +23,8 @@ export type Transaction = {
   category: TransactionCategory;
   date: string;
   note?: string;
+  responsible?: string;
+  purchaseLocation?: string;
   invoiceImportId?: string;
   sourceBank?: string;
   installmentCurrent?: number | null;

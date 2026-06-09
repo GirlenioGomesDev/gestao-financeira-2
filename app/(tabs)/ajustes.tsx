@@ -2,12 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useState } from 'react';
-import { Alert, Pressable, Share, TextInput, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Share, TextInput, View } from 'react-native';
 
-import { PaperScreen } from '@/components/PaperScreen';
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { SectionHeader } from '@/components/SectionHeader';
-import { AppText } from '@/components/Text';
+import { AppText, DisplayText } from '@/components/Text';
 import { EditableField } from '@/components/EditableField';
 import { useFinanceStore } from '@/store/useFinanceStore';
 import { exportBackup, exportFinancialReport, importBackupFromJson } from '@/utils/backup';
@@ -158,10 +156,17 @@ export default function SettingsScreen() {
   }
 
   return (
-    <PaperScreen>
-      <SectionHeader title="Ajustes" subtitle="Deixe o diario combinando com sua rotina." />
+    <ScrollView
+      className="flex-1 bg-paper"
+      contentContainerClassName="px-5 pb-32 pt-14"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="mb-6">
+        <AppText className="text-xs uppercase text-muted">Configurações</AppText>
+        <DisplayText className="text-4xl">Ajustes</DisplayText>
+      </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Perfil</AppText>
         <EditableField
           value={userName}
@@ -186,7 +191,7 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="font-body text-lg">Salario fixo</AppText>
         <AppText className="mt-1 text-sm text-muted">
           Usado para calcular quanto do mes ja foi comprometido.
@@ -195,14 +200,14 @@ export default function SettingsScreen() {
           value={salaryDraft}
           onChangeText={setSalaryDraft}
           keyboardType="decimal-pad"
-          className="my-4 rounded-paper border border-line bg-paper px-4 py-3 font-body text-base text-ink"
+          className="my-4 rounded-card border border-line bg-paper px-4 py-3 font-body text-base text-ink"
         />
         <PrimaryButton label="Salvar salario" icon="save" onPress={saveSalary} />
       </View>
 
       <Pressable
         onPress={enableReminder}
-        className="mb-4 flex-row items-center rounded-paper border border-line bg-surface p-4"
+        className="mb-4 flex-row items-center rounded-card border border-line bg-surface p-4 shadow-card"
       >
         <View className="mr-3 h-11 w-11 items-center justify-center rounded-full bg-paper">
           <Ionicons
@@ -220,7 +225,7 @@ export default function SettingsScreen() {
         <Ionicons name="chevron-forward" size={20} color="#9A9085" />
       </Pressable>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="font-body text-lg">Backup local</AppText>
         <AppText className="mb-4 mt-1 text-sm text-muted">
           Exporte ou restaure um JSON completo com dados locais.
@@ -240,7 +245,7 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="font-body text-lg">Relatorios</AppText>
         <AppText className="mb-4 mt-1 text-sm text-muted">
           Exporte receitas e despesas sem internet.
@@ -273,10 +278,10 @@ export default function SettingsScreen() {
         </View>
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Contas</AppText>
         {accounts.map(account => (
-          <View key={account.id} className="mb-3 rounded-paper border border-line bg-paper p-3">
+          <View key={account.id} className="mb-3 rounded-card border border-line bg-paper p-3">
             <EditableField
               value={account.name}
               type="text"
@@ -329,10 +334,10 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Cartoes</AppText>
         {creditCards.map(card => (
-          <View key={card.id} className="mb-3 rounded-paper border border-line bg-paper p-3">
+          <View key={card.id} className="mb-3 rounded-card border border-line bg-paper p-3">
             <EditableField
               value={card.name}
               type="text"
@@ -403,10 +408,10 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Lancamentos recorrentes</AppText>
         {recurringEntries.map(entry => (
-          <View key={entry.id} className="mb-3 rounded-paper border border-line bg-paper p-3">
+          <View key={entry.id} className="mb-3 rounded-card border border-line bg-paper p-3">
             <EditableField
               value={entry.title}
               type="text"
@@ -477,10 +482,10 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Minhas Categorias</AppText>
         {categories.map(category => (
-          <View key={category.id} className="mb-3 rounded-paper border border-line bg-paper p-3">
+          <View key={category.id} className="mb-3 rounded-card border border-line bg-paper p-3">
             <EditableField
               value={category.name}
               type="text"
@@ -512,12 +517,12 @@ export default function SettingsScreen() {
         ))}
       </View>
 
-      <View className="mb-4 rounded-paper border border-line bg-surface p-4">
+      <View className="mb-4 rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="mb-3 font-body text-lg">Frases & Versiculos</AppText>
         {motivationalQuotes.map((quote, index) => (
           <View
             key={`${quote}-${index}`}
-            className="mb-3 rounded-paper border border-line bg-paper p-3"
+            className="mb-3 rounded-card border border-line bg-paper p-3"
           >
             <EditableField
               value={quote}
@@ -527,7 +532,7 @@ export default function SettingsScreen() {
             />
             <Pressable
               onPress={() => deleteMotivationalQuote(index)}
-              className="mt-2 self-start rounded-paper border border-coral px-3 py-2"
+              className="mt-2 self-start rounded-card border border-coral px-3 py-2"
             >
               <AppText className="text-coral">Excluir</AppText>
             </Pressable>
@@ -541,7 +546,7 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <View className="rounded-paper border border-line bg-surface p-4">
+      <View className="rounded-card border border-line bg-surface p-4 shadow-card">
         <AppText className="font-body text-lg">Dados de exemplo</AppText>
         <AppText className="mb-4 mt-1 text-sm text-muted">
           Restaura o caderno inicial para testar o app novamente.
@@ -556,6 +561,6 @@ export default function SettingsScreen() {
           }}
         />
       </View>
-    </PaperScreen>
+    </ScrollView>
   );
 }

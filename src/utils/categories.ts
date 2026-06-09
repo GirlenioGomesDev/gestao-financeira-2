@@ -50,3 +50,5 @@ export const spendingCategories: TransactionCategory[] = [
   'investimentos',
   'outros',
 ];
+
+export const incomeCategories: TransactionCategory[] = ['renda', 'investimentos', 'outros'];

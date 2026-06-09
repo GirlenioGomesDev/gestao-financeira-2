@@ -1,91 +1,100 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const tabColor = '#2F8F6B';
-const mutedColor = '#9A9085';
-type TabIconProps = { color: string; size: number };
+import { AppText } from '@/components/Text';
+import { TransactionModal } from '@/components/TransactionModal';
+
+const tabs = [
+  { name: 'index', label: 'Início', icon: 'home-outline' as const },
+  { name: 'gastos', label: 'Gastos', icon: 'receipt-outline' as const },
+  { name: 'cartoes', label: 'Cartões', icon: 'card-outline' as const },
+  { name: 'metas', label: 'Metas', icon: 'flag-outline' as const },
+  { name: 'diario', label: 'Diário', icon: 'book-outline' as const },
+];
 
 export default function TabsLayout() {
+  const [modalVisible, setModalVisible] = useState(false);
   const insets = useSafeAreaInsets();
-  const bottomInset = Math.max(insets.bottom, 12);
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: tabColor,
-        tabBarInactiveTintColor: mutedColor,
-        tabBarStyle: {
-          backgroundColor: '#FFFDF8',
-          borderTopColor: '#E9DDC7',
-          height: 64 + bottomInset,
-          paddingBottom: bottomInset,
-          paddingTop: 8,
-        },
-        tabBarItemStyle: {
-          height: 54,
-        },
-        tabBarLabelStyle: {
-          fontFamily: 'NunitoSemiBold',
-          fontSize: 12,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Hoje',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <Ionicons name="home-outline" color={color} size={size} />
-          ),
+    <>
+      <Tabs
+        screenOptions={{ headerShown: false }}
+        tabBar={({ state, navigation }) => {
+          const activeRoute = state.routes[state.index]?.name;
+          return (
+            <View
+              style={{ paddingBottom: Math.max(insets.bottom, 8) }}
+              className="flex-row items-center border-t border-line bg-surface px-2 pt-2"
+            >
+              {tabs.slice(0, 2).map(tab => (
+                <TabButton
+                  key={tab.name}
+                  {...tab}
+                  active={activeRoute === tab.name}
+                  onPress={() => navigation.navigate(tab.name)}
+                />
+              ))}
+              <View className="flex-1 items-center justify-center" style={{ height: 58 }}>
+                <Pressable
+                  onPress={() => setModalVisible(true)}
+                  accessibilityLabel="Adicionar lançamento"
+                  className="h-14 w-14 items-center justify-center rounded-full bg-primaryDark"
+                  style={{
+                    shadowColor: '#1E7055',
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.35,
+                    shadowRadius: 8,
+                    elevation: 8,
+                  }}
+                >
+                  <Ionicons name="add" size={30} color="#FFFFFF" />
+                </Pressable>
+              </View>
+              {tabs.slice(2).map(tab => (
+                <TabButton
+                  key={tab.name}
+                  {...tab}
+                  active={activeRoute === tab.name}
+                  onPress={() => navigation.navigate(tab.name)}
+                />
+              ))}
+            </View>
+          );
         }}
-      />
-      <Tabs.Screen
-        name="gastos"
-        options={{
-          title: 'Gastos',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <MaterialCommunityIcons name="cash-register" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="metas"
-        options={{
-          title: 'Metas',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <MaterialCommunityIcons name="bullseye-arrow" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="cartoes"
-        options={{
-          title: 'Cartões',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <Ionicons name="card-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="diario"
-        options={{
-          title: 'Diario',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <Ionicons name="journal-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="ajustes"
-        options={{
-          title: 'Ajustes',
-          tabBarIcon: ({ color, size }: TabIconProps) => (
-            <Ionicons name="settings-outline" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        {tabs.map(tab => (
+          <Tabs.Screen key={tab.name} name={tab.name} />
+        ))}
+        <Tabs.Screen name="ajustes" options={{ href: null }} />
+      </Tabs>
+      <TransactionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+    </>
+  );
+}
+
+function TabButton({
+  label,
+  icon,
+  active,
+  onPress,
+}: {
+  name: string;
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  active: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} className="flex-1 items-center py-1">
+      <Ionicons name={icon} size={22} color={active ? '#1E7055' : '#9A9085'} />
+      <AppText className={`mt-0.5 text-[10px] ${active ? 'text-primaryDark' : 'text-muted'}`}>
+        {label}
+      </AppText>
+      <View className={`mt-1 h-1 w-1 rounded-full ${active ? 'bg-primaryDark' : ''}`} />
+    </Pressable>
   );
 }

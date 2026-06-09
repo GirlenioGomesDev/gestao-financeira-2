@@ -15,7 +15,7 @@ export default function ImportInvoiceScreen() {
     <PaperScreen>
       <SectionHeader
         title="Importar Fatura"
-        subtitle="Foto, PDF ou digitacao manual. Voce revisa tudo antes."
+        subtitle="Foto, CSV ou digitacao manual. Voce revisa tudo antes."
       />
       <View className="mb-5 flex-row gap-3">
         <ImportCard
@@ -25,10 +25,10 @@ export default function ImportInvoiceScreen() {
           onPress={() => router.push('/import-invoice/camera')}
         />
         <ImportCard
-          icon="folder-open"
-          title="PDF"
-          subtitle="Importar arquivo"
-          onPress={() => router.push('/import-invoice/pdf')}
+          icon="document-text-outline"
+          title="CSV / Extrato"
+          subtitle="Arquivo exportado do banco"
+          onPress={() => router.push('/import-invoice/arquivo' as never)}
         />
       </View>
       <Pressable

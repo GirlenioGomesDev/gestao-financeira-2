@@ -14,6 +14,8 @@ type Props = {
 
 export function EditTransactionModal({ transaction, onClose }: Props) {
   const updateTransaction = useFinanceStore(state => state.updateTransaction);
+  const creditCards = useFinanceStore(state => state.creditCards);
+  const accounts = useFinanceStore(state => state.accounts);
 
   if (!transaction) {
     return null;
@@ -77,6 +79,136 @@ export function EditTransactionModal({ transaction, onClose }: Props) {
               })
             }
           />
+          <EditableField
+            value={transaction.responsible ?? ''}
+            type="text"
+            label="Responsável"
+            placeholder="Ex: João, Maria, Filhos..."
+            displayStyle="card"
+            onSave={value =>
+              updateTransaction(transaction.id, {
+                responsible: String(value).trim() || undefined,
+              })
+            }
+          />
+          <EditableField
+            value={transaction.purchaseLocation ?? ''}
+            type="text"
+            label="Onde foi"
+            placeholder="Ex: Mercadão, iFood, Amazon..."
+            displayStyle="card"
+            onSave={value =>
+              updateTransaction(transaction.id, {
+                purchaseLocation: String(value).trim() || undefined,
+              })
+            }
+          />
+          {transaction.type === 'expense' ? (
+            <>
+              <AppText className="mt-3 text-xs uppercase text-muted">Forma de pagamento</AppText>
+              <View className="mt-2">
+                <AppText className="mb-1 text-sm text-muted">Cartão (opcional)</AppText>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerClassName="gap-2"
+                >
+                  <Pressable
+                    onPress={() => updateTransaction(transaction.id, { cardId: undefined })}
+                    className={`rounded-full border px-4 py-2 ${
+                      !transaction.cardId
+                        ? 'border-primaryDark bg-primaryDark'
+                        : 'border-line bg-surface'
+                    }`}
+                  >
+                    <AppText
+                      className={!transaction.cardId ? 'text-sm text-white' : 'text-sm text-ink'}
+                    >
+                      Nenhum
+                    </AppText>
+                  </Pressable>
+                  {creditCards.map(card => (
+                    <Pressable
+                      key={card.id}
+                      onPress={() =>
+                        updateTransaction(transaction.id, {
+                          cardId: card.id,
+                          accountId: undefined,
+                        })
+                      }
+                      className={`rounded-full border px-4 py-2 ${
+                        transaction.cardId === card.id
+                          ? 'border-primaryDark bg-primaryDark'
+                          : 'border-line bg-surface'
+                      }`}
+                    >
+                      <AppText
+                        className={
+                          transaction.cardId === card.id ? 'text-sm text-white' : 'text-sm text-ink'
+                        }
+                      >
+                        {card.name}
+                      </AppText>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              </View>
+
+              {accounts.length > 0 ? (
+                <View className="mt-3">
+                  <AppText className="mb-1 text-sm text-muted">Conta (opcional)</AppText>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerClassName="gap-2"
+                  >
+                    <Pressable
+                      onPress={() => updateTransaction(transaction.id, { accountId: undefined })}
+                      className={`rounded-full border px-4 py-2 ${
+                        !transaction.accountId
+                          ? 'border-primaryDark bg-primaryDark'
+                          : 'border-line bg-surface'
+                      }`}
+                    >
+                      <AppText
+                        className={
+                          !transaction.accountId ? 'text-sm text-white' : 'text-sm text-ink'
+                        }
+                      >
+                        Nenhuma
+                      </AppText>
+                    </Pressable>
+                    {accounts.map(account => (
+                      <Pressable
+                        key={account.id}
+                        onPress={() =>
+                          updateTransaction(transaction.id, {
+                            accountId: account.id,
+                            cardId: undefined,
+                          })
+                        }
+                        className={`rounded-full border px-4 py-2 ${
+                          transaction.accountId === account.id
+                            ? 'border-primaryDark bg-primaryDark'
+                            : 'border-line bg-surface'
+                        }`}
+                      >
+                        <AppText
+                          className={
+                            transaction.accountId === account.id
+                              ? 'text-sm text-white'
+                              : 'text-sm text-ink'
+                          }
+                        >
+                          {account.name}
+                        </AppText>
+                      </Pressable>
+                    ))}
+                  </ScrollView>
+                </View>
+              ) : null}
+            </>
+          ) : null}
           <AppText className="mt-2 text-xs text-muted">
             Categorias: {Object.values(categoryLabels).join(', ')}
           </AppText>

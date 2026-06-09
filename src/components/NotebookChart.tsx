@@ -2,28 +2,27 @@ import { View } from 'react-native';
 
 import { AppText } from '@/components/Text';
 
-type Props = {
-  values: number[];
-};
+type Props = { values: number[] };
+
+function abbreviate(value: number) {
+  if (value >= 1000) return `${(value / 1000).toFixed(1)}k`;
+  return String(Math.round(value));
+}
 
 export function NotebookChart({ values }: Props) {
   const max = Math.max(...values, 1);
 
   return (
-    <View className="rounded-paper border border-line bg-surface p-4">
-      <View className="mb-2 flex-row items-center justify-between">
-        <AppText className="font-body text-base">Ritmo de gastos</AppText>
-        <AppText className="text-xs text-muted">ultimos lancamentos</AppText>
-      </View>
-      <View className="h-28 flex-row items-end gap-2">
-        {values.map((value, index) => (
+    <View className="h-20 flex-row items-end gap-1">
+      {values.map((value, index) => (
+        <View key={index} className="flex-1 items-center justify-end">
+          <AppText className="mb-0.5 text-[9px] text-muted">{abbreviate(value)}</AppText>
           <View
-            key={`${value}-${index}`}
-            className="flex-1 rounded-t-paper bg-primary"
-            style={{ height: `${Math.max(12, (value / max) * 100)}%` }}
+            className="w-full rounded-t-sm bg-primaryDark/60"
+            style={{ height: Math.max(4, (value / max) * 56) }}
           />
-        ))}
-      </View>
+        </View>
+      ))}
     </View>
   );
 }

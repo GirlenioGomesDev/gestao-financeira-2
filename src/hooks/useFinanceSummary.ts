@@ -51,10 +51,7 @@ export function useFinanceSummary() {
     const annualEvolution = buildAnnualEvolution(transactions, 3);
     const cardUsage = creditCards.map(card => {
       const spent = monthTransactions
-        .filter(
-          item =>
-            item.type === 'expense' && (item.cardId === card.id || item.sourceBank === card.bank),
-        )
+        .filter(item => item.type === 'expense' && item.cardId === card.id)
         .reduce((sum, item) => sum + item.amount, 0);
       return {
         ...card,
@@ -72,12 +69,17 @@ export function useFinanceSummary() {
         .filter(item => item.active && item.type === 'expense')
         .reduce((sum, item) => sum + item.amount, 0);
       const installments = transactions
-        .filter(
-          item =>
-            item.installmentTotal &&
-            item.installmentCurrent &&
-            item.installmentCurrent + offset < item.installmentTotal,
-        )
+        .filter(item => {
+          if (!item.installmentTotal || !item.installmentCurrent) return false;
+          const txDate = new Date(item.date);
+          const txMonthIndex = txDate.getFullYear() * 12 + txDate.getMonth();
+          const forecastMonthIndex = now.getFullYear() * 12 + now.getMonth() + offset + 1;
+          const installmentIndex = forecastMonthIndex - txMonthIndex;
+          return (
+            installmentIndex >= 0 &&
+            item.installmentCurrent + installmentIndex <= item.installmentTotal
+          );
+        })
         .reduce((sum, item) => sum + item.amount, 0);
       return {
         month: monthKey(date),

@@ -17,7 +17,9 @@ import {
 } from '@/types/finance';
 import { uid } from '@/utils/format';
 
-const today = new Date().toISOString();
+function nowISO() {
+  return new Date().toISOString();
+}
 
 type FinanceState = {
   _hasHydrated: boolean;
@@ -81,15 +83,22 @@ type FinanceState = {
 };
 
 const demoTransactions: Transaction[] = [
-  { id: 't-1', type: 'income', title: 'Salario', amount: 2800, category: 'renda', date: today },
-  { id: 't-2', type: 'expense', title: 'Aluguel', amount: 900, category: 'moradia', date: today },
+  { id: 't-1', type: 'income', title: 'Salario', amount: 2800, category: 'renda', date: nowISO() },
+  {
+    id: 't-2',
+    type: 'expense',
+    title: 'Aluguel',
+    amount: 900,
+    category: 'moradia',
+    date: nowISO(),
+  },
   {
     id: 't-3',
     type: 'expense',
     title: 'Compra do mes',
     amount: 520,
     category: 'mercado',
-    date: today,
+    date: nowISO(),
   },
   {
     id: 't-4',
@@ -97,7 +106,7 @@ const demoTransactions: Transaction[] = [
     title: 'Passagens',
     amount: 128,
     category: 'transporte',
-    date: today,
+    date: nowISO(),
   },
   {
     id: 't-5',
@@ -105,7 +114,7 @@ const demoTransactions: Transaction[] = [
     title: 'Conta de luz',
     amount: 146.8,
     category: 'contas',
-    date: today,
+    date: nowISO(),
   },
 ];
 
@@ -161,7 +170,7 @@ const demoBudgets: BudgetEnvelope[] = [
 const demoDiary: DiaryEntry[] = [
   {
     id: 'd-1',
-    date: today,
+    date: nowISO(),
     mood: 'tranquilo',
     text: 'Comecei a semana olhando o dinheiro com calma. Uma escolha pequena por dia ja ajuda.',
   },

@@ -91,40 +91,7 @@ export function parseInvoiceText(
   };
 }
 
-export function decodePdfTextFromBase64(base64: string) {
-  const binary = decodeBase64(base64);
-  const snippets: string[] = [];
-  const literalMatches = binary.match(/\((?:\\.|[^\\)]){2,}\)/g) ?? [];
-  const hexMatches = binary.match(/<([0-9A-Fa-f]{8,})>/g) ?? [];
-
-  for (const match of literalMatches) {
-    snippets.push(
-      match
-        .slice(1, -1)
-        .replace(/\\n/g, '\n')
-        .replace(/\\r/g, '\n')
-        .replace(/\\t/g, ' ')
-        .replace(/\\([()\\])/g, '$1'),
-    );
-  }
-
-  for (const match of hexMatches) {
-    const hex = match.slice(1, -1);
-    let decoded = '';
-    for (let index = 0; index < hex.length; index += 2) {
-      const code = Number.parseInt(hex.slice(index, index + 2), 16);
-      if (code >= 32 && code <= 126) decoded += String.fromCharCode(code);
-    }
-    if (decoded.trim().length > 2) snippets.push(decoded);
-  }
-
-  return snippets
-    .join('\n')
-    .replace(/\s{3,}/g, ' ')
-    .trim();
-}
-
-export function parseCsvText(text: string, source: InvoiceSource = 'pdf', fileName?: string) {
+export function parseCsvText(text: string, source: InvoiceSource = 'csv', fileName?: string) {
   return parseInvoiceText(text, source, fileName);
 }
 
@@ -381,24 +348,4 @@ function normalize(value: string) {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
-}
-
-function decodeBase64(base64: string) {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  let output = '';
-  let buffer = 0;
-  let bits = 0;
-
-  for (const char of base64.replace(/\s/g, '')) {
-    const value = alphabet.indexOf(char);
-    if (value < 0 || char === '=') continue;
-    buffer = (buffer << 6) | value;
-    bits += 6;
-    if (bits >= 8) {
-      bits -= 8;
-      output += String.fromCharCode((buffer >> bits) & 0xff);
-    }
-  }
-
-  return output;
 }

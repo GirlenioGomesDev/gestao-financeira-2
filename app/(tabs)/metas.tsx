@@ -1,16 +1,14 @@
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Alert, Pressable, ScrollView, View } from 'react-native';
 
 import { EditableField } from '@/components/EditableField';
 import { EmptyState } from '@/components/EmptyState';
 import { EmojiPicker } from '@/components/EmojiPicker';
 import { GoalModal } from '@/components/GoalModal';
-import { PaperScreen } from '@/components/PaperScreen';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ProgressBar } from '@/components/ProgressBar';
-import { SectionHeader } from '@/components/SectionHeader';
-import { AppText } from '@/components/Text';
+import { AppText, DisplayText } from '@/components/Text';
 import { useFinanceStore } from '@/store/useFinanceStore';
 import { formatCurrency } from '@/utils/format';
 
@@ -28,11 +26,16 @@ export default function GoalsScreen() {
   }
 
   return (
-    <PaperScreen>
-      <SectionHeader
-        title="Metas e sonhos"
-        subtitle="Guardar dinheiro fica mais leve quando ele tem destino."
-      />
+    <ScrollView
+      className="flex-1 bg-paper"
+      contentContainerClassName="px-5 pb-32 pt-14"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="mb-6">
+        <AppText className="text-xs uppercase text-muted">Metas</AppText>
+        <DisplayText className="text-4xl">Sonhos</DisplayText>
+        <AppText className="text-sm text-muted">guardar fica mais leve com destino certo</AppText>
+      </View>
       <PrimaryButton label="Criar sonho" icon="flag" onPress={() => setModalVisible(true)} />
 
       <View className="mt-5">
@@ -40,7 +43,12 @@ export default function GoalsScreen() {
           goals.map(goal => {
             const percent = goal.savedAmount / goal.targetAmount;
             return (
-              <View key={goal.id} className="mb-4 rounded-paper border border-line bg-surface p-4">
+              <View
+                key={goal.id}
+                className={`mb-4 rounded-card border border-line p-4 shadow-card ${
+                  percent >= 1 ? 'bg-positive' : 'bg-surface'
+                }`}
+              >
                 <View className="mb-3 flex-row items-start justify-between">
                   <Pressable
                     onPress={() => setEmojiGoalId(goal.id)}
@@ -107,7 +115,7 @@ export default function GoalsScreen() {
                     <Pressable
                       key={amount}
                       onPress={() => addContribution(goal.id, amount)}
-                      className="flex-1 rounded-paper border border-line bg-paper py-3"
+                      className="flex-1 rounded-card border border-line bg-paper py-3"
                     >
                       <AppText className="text-center font-body">+{formatCurrency(amount)}</AppText>
                     </Pressable>
@@ -145,6 +153,6 @@ export default function GoalsScreen() {
           if (emojiGoalId) updateGoal(emojiGoalId, { emoji });
         }}
       />
-    </PaperScreen>
+    </ScrollView>
   );
 }
